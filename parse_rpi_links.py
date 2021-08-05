@@ -1,4 +1,3 @@
-from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -14,7 +13,9 @@ URL = f'https://www.raspbian.org/RaspbianMirrors'
 def clean_link(link_s):
     match = re.search(r'href=[\'"]?([^\'" >]+)', link_s)
     if match:
-        return match.group(1)
+        link = match.group(1)
+        if "ftp" not in link:
+            return match.group(1)
     else:
         elements = link_s.strip().replace("</p><", "").replace("<br/>", "").replace("rsync", "").replace("(ftp|)", "").split("://")
         if len(elements) > 1:
@@ -40,7 +41,7 @@ def get_html(url, HEADERS, params=None):
 
 
 def write_links(links):
-    with open("mirrors.txt", "w") as file:
+    with open("mirrors_azamat.txt", "w") as file:
         for link in links:
             file.write(f"{link}\n")
 
@@ -50,7 +51,7 @@ def main():
 
     if main_html.status_code == 200:
         parsed_links = get_links(main_html.text, HEADERS, URL)
-
         write_links(parsed_links)
 
 main()
+
