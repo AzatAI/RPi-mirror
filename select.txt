@@ -1,0 +1,1 @@
+deb https://mirrors.datahouse.ru/raspbian/raspbian/ buster main contrib non-free rpi
